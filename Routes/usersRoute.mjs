@@ -19,9 +19,10 @@ USER_API.get('/', (req, res) => {
 })
 
 let nextUserId = 1
-USER_API.post('/', (req, res, next) => {
+USER_API.post('/register', (req, res, next) => {
 
     const { name, email, password } = req.body;
+
     if (name != "" && email != "" && password != "") {
         const user = new User();
         user.name = name;
@@ -35,15 +36,33 @@ USER_API.post('/', (req, res, next) => {
 
         if (!exists) {
             users.push(user);
-            res.status(HttpCodes.SuccesfullRespons.Ok).send("Bruker med id " + user.id + " ble registrert").end();
+            res.status(HttpCodes.SuccesfullRespons.Ok).end();
         } else {
-            res.status(HttpCodes.ClientSideErrorRespons.BadRequest).send("Bruker ekisterer allerede").end();
+            res.status(HttpCodes.ClientSideErrorRespons.BadRequest).end();
         }
 
     } else {
-        res.status(HttpCodes.ClientSideErrorRespons.BadRequest).send("Mangler data felt").end();
+        res.status(HttpCodes.ClientSideErrorRespons.BadRequest).end();
     }
 
+});
+
+USER_API.post('/login', (req, res) => {
+    const { email, password } = req.body;
+    //TODO: add auth scheme
+    // const authHeader = req.headers.authorization;
+
+    if (email !== '' && password !== '') {
+        const user = users.find(u => u.email === email && u.pswHash === password);
+
+        if (user) {
+            res.status(HttpCodes.SuccesfullRespons.Ok).end();
+        } else {
+            res.status(HttpCodes.ClientSideErrorRespons.BadRequest).end();
+        }
+    } else {
+        res.status(HttpCodes.ClientSideErrorRespons.BadRequest).end();
+    }
 });
 
 USER_API.put('/:id', (req, res) => {
@@ -70,9 +89,9 @@ USER_API.delete('/:id', (req, res) => {
 
     if (userIndex !== -1) {
         users.splice(userIndex, 1);
-        res.status(HttpCodes.SuccesfullRespons.Ok).send("Bruker med id: " + userIdToDelete + " ble slettet").end();
+        res.status(HttpCodes.SuccesfullRespons.Ok).end();
     } else {
-        res.status(HttpCodes.ClientSideErrorRespons.NotFound).send("Bruker eksisterer ikke").end();
+        res.status(HttpCodes.ClientSideErrorRespons.NotFound).end();
     }
 });
 

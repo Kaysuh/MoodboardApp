@@ -1,0 +1,114 @@
+body {
+  background: rgb(31, 31, 31);
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2,
+h3,
+p,
+form,
+label {
+  color: #ffffff;
+  padding: 10px 20px;
+}
+
+
+button {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  background: linear-gradient(to right, #444444, #1f1f1f);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s, transform 0.2s;
+}
+
+button:hover {
+  background: linear-gradient(to right, #0065b3, #00c3ff);
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+#userAuthForm {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background: rgb(34, 34, 34);
+  box-shadow: 0 20px 20px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: box-shadow 0.3s, transform 0.3s, background 0.3s;
+
+  background: linear-gradient(to bottom, #1b1b1b, #252525);
+}
+
+#userAuthForm:hover {
+  box-shadow: 0 30px 30px rgba(0, 0, 0, 0.2);
+  transform: translate(-50%, -50%) scale(1.02);
+}
+
+#userAuthForm input,
+#userAuthForm select,
+#userAuthForm textarea,
+#userAuthForm button {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  background: #222;
+  color: #fff;
+}
+
+#userAuthForm input {
+  border: 1px ridge;
+}
+
+#userAuthForm input:focus,
+#userAuthForm select:focus,
+#userAuthForm textarea:focus,
+#userAuthForm button:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+.signup-form #userAuthForm input[name="name"] {
+  display: block;
+}
+
+.shake-animation {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25%,
+  75% {
+    transform: translateX(-5px);
+  }
+
+  50% {
+    transform: translateX(5px);
+  }
+}
