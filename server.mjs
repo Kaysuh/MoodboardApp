@@ -10,7 +10,6 @@ server.use(express.static('public'));
 
 server.use("/user", USER_API);
 
-// A get request handler example)
 server.get("/", (req, res, next) => {
     res.status(200).send(JSON.stringify({ msg: "These are not the droids...." })).end();
 });

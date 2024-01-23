@@ -1,5 +1,5 @@
 class HttpCodes {
-
+    //TODO: Add more specific error handling
     static SuccesfullRespons = {
         Ok: 200
     }
