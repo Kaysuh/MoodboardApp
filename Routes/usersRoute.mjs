@@ -1,6 +1,6 @@
 import express, { json, response } from "express";
 import User from "../modules/user.mjs";
-import HttpCodes from "../modules/httpErrorCodes.mjs";
+import httpResponseHandler from "../Modules/httpResponseHandler.mjs";
 
 
 const USER_API = express.Router();
@@ -15,12 +15,11 @@ USER_API.get('/:id', (req, res) => {
 })
 
 USER_API.get('/', (req, res) => {
-    res.status(HttpCodes.SuccesfullRespons.Ok).json(users)
+    httpResponseHandler.handleResponse(req, res, null, 200, users);
 })
 
 let nextUserId = 1
 USER_API.post('/register', (req, res, next) => {
-
     const { name, email, password } = req.body;
 
     if (name != "" && email != "" && password != "") {
@@ -31,18 +30,16 @@ USER_API.post('/register', (req, res, next) => {
 
         ///TODO: Do not save passwords.
         user.pswHash = password;
-
         let exists = users.some(user => user.email === email);
 
         if (!exists) {
             users.push(user);
-            res.status(HttpCodes.SuccesfullRespons.Ok).end();
+            httpResponseHandler.handleResponse(req, res, null, 201, users);
         } else {
-            res.status(HttpCodes.ClientSideErrorRespons.BadRequest).end();
+            httpResponseHandler.handleResponse(req, res, new Error('User already exists'), 400);
         }
-
     } else {
-        res.status(HttpCodes.ClientSideErrorRespons.BadRequest).end();
+        httpResponseHandler.handleResponse(req, res, new Error('Unexpected error'), 500);
     }
 
 });
@@ -56,42 +53,38 @@ USER_API.post('/login', (req, res) => {
         const user = users.find(u => u.email === email && u.pswHash === password);
 
         if (user) {
-            res.status(HttpCodes.SuccesfullRespons.Ok).end();
+            httpResponseHandler.handleResponse(req, res, null, 200, user);
         } else {
-            res.status(HttpCodes.ClientSideErrorRespons.BadRequest).end();
+            httpResponseHandler.handleResponse(req, res, new Error('Wrong username or password.'), 400);
         }
     } else {
-        res.status(HttpCodes.ClientSideErrorRespons.BadRequest).end();
+        httpResponseHandler.handleResponse(req, res, new Error('Unexpected error'), 500);
     }
 });
 
 USER_API.put('/:id', (req, res) => {
     const userIdToUpdate = parseInt(req.params.id, 10);
-
     const updatedUserData = req.body;
-
     const userIndex = users.findIndex(user => user.id === userIdToUpdate);
 
     if (userIndex !== -1) {
         users[userIndex] = { ...users[userIndex], ...updatedUserData };
-
-        res.status(HttpCodes.SuccesfullRespons.Ok).end();
+        httpResponseHandler.handleResponse(req, res, null, 200, null);
     } else {
-        res.status(HttpCodes.ClientSideErrorRespons.NotFound).end();
+        httpResponseHandler.handleResponse(req, res, new Error(), 404);
     }
 });
 
 
 USER_API.delete('/:id', (req, res) => {
     const userIdToDelete = parseInt(req.params.id, 10);
-
     const userIndex = users.findIndex(user => user.id === userIdToDelete);
 
     if (userIndex !== -1) {
         users.splice(userIndex, 1);
-        res.status(HttpCodes.SuccesfullRespons.Ok).end();
+        httpResponseHandler.handleResponse(req, res, null, 200, null);
     } else {
-        res.status(HttpCodes.ClientSideErrorRespons.NotFound).end();
+        httpResponseHandler.handleResponse(req, res, new Error(), 404);
     }
 });
 

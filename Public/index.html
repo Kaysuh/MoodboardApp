@@ -71,10 +71,9 @@
             fetch('http://localhost:8080/user/register', fetchOptions)
                 .then(response => {
                     if (response.ok) {
-                        console.log("Registration of user successfull: " + response.status)
+                        console.log(response)
                         toggleForm()
                     }
-
                 })
         }
 
@@ -97,11 +96,9 @@
 
                 if (response.ok) {
                     console.log(response);
-                    console.log("Logged in!");
                     userAuthForm.style.display = "none";
                     // window.location.href = 'index.html';
                 } else {
-                    console.error('Login failed');
                     loginErrorAnim()
                 }
             } catch (error) {
