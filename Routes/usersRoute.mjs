@@ -1,36 +1,34 @@
 import express, { json, response } from "express";
-import User from "../modules/user.mjs";
+import User from "../Modules/user.mjs";
+import bcrypt from 'bcrypt';
 
 const USER_API = express.Router();
 USER_API.use(express.json());
 
-export const users = [];
-
 // USER_API.get('/:id', (req, res) => {
 // })
 
-USER_API.get('/', (req, res) => {
+USER_API.get('/', async (req, res) => {
+    const user = new User();
+    const users = await user.getUsers();
     res.sendSuccess(users);
 });
 
 
-let nextUserId = 1
-USER_API.post('/register', (req, res) => {
+USER_API.post('/register', async (req, res) => {
     const { name, email, password } = req.body;
 
     if (name != "" && email != "" && password != "") {
-        const user = new User();
+        let user = new User();
         user.name = name;
         user.email = email;
-        user.id = nextUserId++;
 
-        ///TODO: Do not save passwords.
-        user.pswHash = password;
-        let exists = users.some(user => user.email === email);
+        user.pswHash = await bcrypt.hash(password, 10)
+        let exists = false
 
         if (!exists) {
-            users.push(user);
-            res.sendSuccess(users, 201);
+            user = await user.save();
+            res.sendSuccess(user, 201);
         } else {
             res.sendError(new Error('User already exists'), 400);
         }
@@ -40,14 +38,10 @@ USER_API.post('/register', (req, res) => {
 });
 
 
-USER_API.post('/login', (req, res) => {
+USER_API.post('/login', async (req, res) => {
     const { email, password } = req.body;
-    //TODO: add auth scheme
-    // const authHeader = req.headers.authorization;
-
     if (email !== '' && password !== '') {
-        const user = users.find(u => u.email === email && u.pswHash === password);
-
+        const user = await User.authenticate(email, password);
         if (user) {
             res.sendSuccess(user, 200);
         } else {
@@ -58,29 +52,41 @@ USER_API.post('/login', (req, res) => {
     }
 });
 
-USER_API.put('/:id', (req, res) => {
+USER_API.put('/:id', async (req, res) => {
     const userIdToUpdate = parseInt(req.params.id, 10);
     const updatedUserData = req.body;
-    const userIndex = users.findIndex(user => user.id === userIdToUpdate);
+    const userToUpdate = new User();
+    userToUpdate.id = userIdToUpdate;
+    req.body.pswHash = await bcrypt.hash(req.body.pswHash, 10)
+    Object.assign(userToUpdate, updatedUserData);
 
-    if (userIndex !== -1) {
-        users[userIndex] = { ...users[userIndex], ...updatedUserData };
-        res.sendSuccess(users, 200);
-    } else {
-        res.sendError(new Error(), 404);
+    try {
+        const updateResult = await userToUpdate.save();
+        if (updateResult) {
+            res.sendSuccess({ message: 'User updated successfully' }, 200);
+        } else {
+            res.sendError(new Error('User not found'), 404);
+        }
+    } catch (error) {
+        console.error(error);
+        res.sendError(new Error('An error occurred while updating the user'), 500);
     }
 });
 
 
-USER_API.delete('/:id', (req, res) => {
-    const userIdToDelete = parseInt(req.params.id, 10);
-    const userIndex = users.findIndex(user => user.id === userIdToDelete);
 
-    if (userIndex !== -1) {
-        users.splice(userIndex, 1);
-        res.sendSuccess(users, 200);
-    } else {
-        res.sendError(new Error(), 404);
+USER_API.delete('/:id', async (req, res) => {
+    const userIdToDelete = parseInt(req.params.id, 10)
+    const userToDelete = new User();
+    userToDelete.id = userIdToDelete
+
+    try {
+        await userToDelete.delete();
+        res.sendSuccess({ message: 'User deleted successfully' }, 200);
+    }
+    catch (error) {
+        console.error(error);
+        res.sendError(new Error('An error occurred while deleting the user'), 500);
     }
 });
 
