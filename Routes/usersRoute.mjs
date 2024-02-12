@@ -1,32 +1,28 @@
 import express, { json, response } from "express";
 import User from "../modules/user.mjs";
-import httpResponseHandler from "../Modules/httpResponseHandler.mjs";
-
 
 const USER_API = express.Router();
+USER_API.use(express.json());
 
 export const users = [];
 
-USER_API.get('/:id', (req, res) => {
-    // Tip: All the information you need to get the id part of the request can be found in the documentation 
-    // https://expressjs.com/en/guide/routing.html (Route parameters)
-    /// TODO: 
-    // Return user object
-})
+// USER_API.get('/:id', (req, res) => {
+// })
 
 USER_API.get('/', (req, res) => {
-    httpResponseHandler.handleResponse(req, res, null, 200, users);
-})
+    res.sendSuccess(users);
+});
+
 
 let nextUserId = 1
-USER_API.post('/register', (req, res, next) => {
+USER_API.post('/register', (req, res) => {
     const { name, email, password } = req.body;
 
     if (name != "" && email != "" && password != "") {
         const user = new User();
         user.name = name;
         user.email = email;
-        user.id = nextUserId++
+        user.id = nextUserId++;
 
         ///TODO: Do not save passwords.
         user.pswHash = password;
@@ -34,15 +30,15 @@ USER_API.post('/register', (req, res, next) => {
 
         if (!exists) {
             users.push(user);
-            httpResponseHandler.handleResponse(req, res, null, 201, users);
+            res.sendSuccess(users, 201);
         } else {
-            httpResponseHandler.handleResponse(req, res, new Error('User already exists'), 400);
+            res.sendError(new Error('User already exists'), 400);
         }
     } else {
-        httpResponseHandler.handleResponse(req, res, new Error('Unexpected error'), 500);
+        res.sendError(new Error('Missing name, email, or password'), 400);
     }
-
 });
+
 
 USER_API.post('/login', (req, res) => {
     const { email, password } = req.body;
@@ -53,12 +49,12 @@ USER_API.post('/login', (req, res) => {
         const user = users.find(u => u.email === email && u.pswHash === password);
 
         if (user) {
-            httpResponseHandler.handleResponse(req, res, null, 200, user);
+            res.sendSuccess(user, 200);
         } else {
-            httpResponseHandler.handleResponse(req, res, new Error('Wrong username or password.'), 400);
+            res.sendError(new Error('Wrong username or password.'), 400);
         }
     } else {
-        httpResponseHandler.handleResponse(req, res, new Error('Unexpected error'), 500);
+        res.sendError(new Error('Email and password must not be empty.'), 400);
     }
 });
 
@@ -69,9 +65,9 @@ USER_API.put('/:id', (req, res) => {
 
     if (userIndex !== -1) {
         users[userIndex] = { ...users[userIndex], ...updatedUserData };
-        httpResponseHandler.handleResponse(req, res, null, 200, null);
+        res.sendSuccess(users, 200);
     } else {
-        httpResponseHandler.handleResponse(req, res, new Error(), 404);
+        res.sendError(new Error(), 404);
     }
 });
 
@@ -82,9 +78,9 @@ USER_API.delete('/:id', (req, res) => {
 
     if (userIndex !== -1) {
         users.splice(userIndex, 1);
-        httpResponseHandler.handleResponse(req, res, null, 200, null);
+        res.sendSuccess(users, 200);
     } else {
-        httpResponseHandler.handleResponse(req, res, new Error(), 404);
+        res.sendError(new Error(), 404);
     }
 });
 
