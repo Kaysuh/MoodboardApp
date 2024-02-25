@@ -6,7 +6,7 @@ class httpResponseHandler {
         404: 'Not Found',
         500: 'Internal Server Error',
     };
-    
+
     static HTTPMethods = {
         POST: "POST",
         GET: "GET",

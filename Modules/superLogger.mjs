@@ -21,10 +21,10 @@ const colorize = (method) => {
 class SuperLogger {
 
     static LOGGING_LEVELS = {
-        ALL: 0,         
-        VERBOSE: 5,     
-        NORMAL: 10,    
-        IMPORTANT: 100, 
+        ALL: 0,
+        VERBOSE: 5,
+        NORMAL: 10,
+        IMPORTANT: 100,
         CRTICAL: 999
     };
 
