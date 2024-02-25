@@ -23,9 +23,9 @@ server.use((req, res, next) => {
     next();
 });
 
-server.get("/", (req, res, next) => {
-    res.status(200).send(JSON.stringify({ msg: "These are not the droids...." })).end();
-});
+// server.get("/", (req, res, next) => {
+//     res.status(200).send(JSON.stringify({ msg: "These are not the droids...." })).end();
+// });
 
 server.listen(server.get('port'), function () {
     console.log('server online', server.get('port'));
