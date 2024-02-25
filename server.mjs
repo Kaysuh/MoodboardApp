@@ -14,7 +14,7 @@ server.use(logger.createAutoHTTPRequestLogger());
 server.use(httpResponseHandler.handleResponse)
 
 server.use(express.json())
-server.use(express.static('public'));
+server.use(express.static('Public'));
 
 server.use("/user", USER_API);
 
