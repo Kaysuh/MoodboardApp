@@ -18,15 +18,6 @@ server.use(express.static('Public'));
 
 server.use("/user", USER_API);
 
-server.use((req, res, next) => {
-    res.setHeader("Content-Security-Policy", "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:;");
-    next();
-});
-
-// server.get("/", (req, res, next) => {
-//     res.status(200).send(JSON.stringify({ msg: "These are not the droids...." })).end();
-// });
-
 server.listen(server.get('port'), function () {
     console.log('server online', server.get('port'));
 });
