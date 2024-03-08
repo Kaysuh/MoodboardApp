@@ -5,8 +5,22 @@ import bcrypt from 'bcrypt';
 const USER_API = express.Router();
 USER_API.use(express.json());
 
-// USER_API.get('/:id', (req, res) => {
-// })
+USER_API.get('/:id', async (req, res) => {
+    try {
+        const user = new User();
+        const userToGet = await user.getUser(req.params.id);
+        
+        if (userToGet) {
+            res.json(userToGet);
+        } else {
+            res.status(404).send({ message: 'User not found' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: 'Error fetching user' });
+    }
+});
+
 
 USER_API.get('/', async (req, res) => {
     const user = new User();

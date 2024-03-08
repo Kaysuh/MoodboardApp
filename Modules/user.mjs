@@ -20,6 +20,11 @@ class User {
     return users;
   }
 
+  async getUser(id) {
+    const user = await DBManager.getUser({id})
+    return user;
+  }
+
   async save() {
     if (this.id) {
       try {

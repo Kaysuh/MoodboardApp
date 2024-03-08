@@ -1,8 +1,16 @@
 import pg from "pg"
 import bcrypt from 'bcrypt';
 
-if (process.env.DB_CONNECTIONSTRING == undefined) {
-    throw ("You forgot the db connection string");
+let dbConnectionString;
+
+if (process.env.NODE_ENV === 'production') {
+    dbConnectionString = process.env.DB_CONNECTIONSTRING_PROD;
+} else {
+    dbConnectionString = process.env.DB_CONNECTIONSTRING_DEV;
+}
+
+if (!dbConnectionString) {
+    throw new Error("Database connection string is missing.");
 }
 
 /// TODO: is the structure / design of the DBManager as good as it could be?
@@ -54,6 +62,25 @@ class DBManager {
         }
     }
 
+    async getUser(user) {
+        const client = new pg.Client(this.#credentials);
+        try {
+            await client.connect();
+            const output = await client.query('Select * from "public"."Users" where id = $1;', [user.id]);
+            
+            if (output.rows.length > 0) {
+                return output.rows[0];
+            } else {
+                return null;
+            }
+        } catch (error) {
+            console.error('Error fetching user:', error);
+            throw error;
+        } finally {
+            await client.end();
+        }
+    }
+    
 
     async updateUser(user) {
 
@@ -128,4 +155,4 @@ class DBManager {
 }
 
 
-export default new DBManager(process.env.DB_CONNECTIONSTRING);
+export default new DBManager(dbConnectionString);

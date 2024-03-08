@@ -6,7 +6,7 @@ import httpResponseHandler from './Modules/httpResponseHandler.mjs';
 import SuperLogger from './Modules/superLogger.mjs';
 
 const server = express();
-const port = (process.env.PORT || 3000);
+const port = (process.env.PORT || 8080);
 server.set('port', port);
 
 const logger = new SuperLogger()
