@@ -6,3 +6,4 @@ CREATE TABLE "Users" (
 );
 
 ALTER TABLE "public"."Users" ADD CONSTRAINT email_unique UNIQUE ("email");
+

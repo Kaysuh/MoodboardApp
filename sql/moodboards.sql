@@ -1,0 +1,7 @@
+CREATE TABLE "Moodboards" (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name TEXT NOT NULL,
+    images JSON NOT NULL,
+    user_id INTEGER,
+    FOREIGN KEY (user_id) REFERENCES "Users"(id)
+);

@@ -21,7 +21,7 @@ class User {
   }
 
   async getUser(id) {
-    const user = await DBManager.getUser({id})
+    const user = await DBManager.getUser({ id })
     return user;
   }
 
@@ -40,7 +40,6 @@ class User {
   }
 
   async delete() {
-    /// TODO: What happens if the DBManager fails to complete its task?
     try {
       const deletionResult = await DBManager.deleteUser(this);
       return deletionResult.rowCount > 0;

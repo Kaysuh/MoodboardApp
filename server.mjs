@@ -1,6 +1,7 @@
 import 'dotenv/config'
 import express from 'express' 
 import USER_API from './Routes/usersRoute.mjs';
+import MOODBOARD_API from './Routes/moodboardsRoute.mjs';
 
 import httpResponseHandler from './Modules/httpResponseHandler.mjs';
 import SuperLogger from './Modules/superLogger.mjs';
@@ -17,6 +18,7 @@ server.use(express.json())
 server.use(express.static('Public'));
 
 server.use("/user", USER_API);
+server.use("/moodboard", MOODBOARD_API)
 
 server.listen(server.get('port'), function () {
     console.log('server online', server.get('port'));
