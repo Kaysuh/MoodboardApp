@@ -5,6 +5,79 @@ body {
   padding: 0;
 }
 
+header {
+  display: flex;
+  padding: 1em;
+  align-items: center;
+}
+
+footer {
+  background-color: rgb(31, 31, 31);
+  color: #ffffff;
+  text-align: center;
+  padding: 1em;
+}
+
+.navigation {
+  list-style-type: none;
+  padding: 0;
+}
+
+.navigation li {
+  display: inline;
+  margin: 0 20px;
+}
+
+.navigation a {
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.moodboard-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.moodboard {
+  width: calc(33% - 20px);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 10px;
+}
+
+.moodboard-item {
+  height: 200px;
+  padding-top: 20px;
+  background-color: #424242;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.moodboard-item.over {
+  background-color: #f0f0f0;
+}
+
+.moodboard-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.moodboard-item.over {
+  background-color: #e0e0e0;
+}
+
+.draggable-img {
+  max-width: 100%;
+  cursor: grab;
+}
+
 h1,
 h2,
 h3,
@@ -15,10 +88,9 @@ label {
   padding: 10px 20px;
 }
 
-
 button {
   display: inline-block;
-  padding: 10px 20px;
+  padding: 5px 15px;
   font-size: 16px;
   text-align: center;
   text-decoration: none;
@@ -27,13 +99,13 @@ button {
   border: none;
   border-radius: 5px;
   color: #fff;
-  background: linear-gradient(to right, #444444, #1f1f1f);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: rgb(31, 31, 31);
   transition: background 0.3s, transform 0.2s;
 }
 
 button:hover {
   background: linear-gradient(to right, #0065b3, #00c3ff);
+  border-color: #0065b3;
   transform: translateY(-2px);
 }
 
@@ -42,6 +114,55 @@ button:active {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.search-container {
+  display: flex;
+  align-items: right;
+  background-color: #202020;
+  border-radius: 22px;
+  border: 2px;
+  border-style: solid;
+  border-color: #9e9e9e;
+  padding: 5px 10px;
+}
+
+.search-input {
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  color: white;
+  margin-right: 10px;
+  padding: 10px;
+}
+
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.search-input:focus {
+  outline: none;
+}
+
+.search-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.search-button svg {
+  color: white;
+}
+
+.search-button:focus,
+.search-input:focus+.search-button {
+  outline: none;
+}
+
+.search-button:hover svg {
+  color: #9e9e9e;
+}
 
 #userAuthForm {
   position: fixed;

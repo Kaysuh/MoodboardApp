@@ -2,7 +2,7 @@ import { userLogin, userRegistration } from '../Model/userAuth.mjs';
 
 const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:8080' : 'https://moodboardapp.onrender.com';
 
-async function loadForm() {
+export async function loadForm() {
     try {
         const response = await fetch('/view/formTemplate.html');
         const text = await response.text();
@@ -17,7 +17,7 @@ async function loadForm() {
     }
 }
 
-export function initializeForm() {
+function initializeForm() {
     const authForm = document.getElementById('authForm');
     const email = document.getElementById('email');
     const password = document.getElementById('password');
@@ -86,5 +86,3 @@ function loginErrorAnim() {
         password.style.borderColor = 'white'
     }, 500);
 }
-
-loadForm();
