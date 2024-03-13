@@ -1,4 +1,4 @@
-import { userLogin, userRegistration } from '../Model/userAuth.mjs';
+import { userLogin, userRegistration } from '../Model/userAuthModel.mjs';
 
 const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:8080' : 'https://moodboardapp.onrender.com';
 

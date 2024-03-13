@@ -1,4 +1,9 @@
 import { loadForm } from "./formView.mjs";
+import { loadMoodboards } from "../Model/moodboardModel.mjs";
+import { loadMoodboardView } from "./moodboardView.mjs";
+
+const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:8080' : 'https://moodboardapp.onrender.com';
+
 async function loadHeader() {
     try {
         const response = await fetch('/view/headerTemplate.html');
@@ -14,100 +19,30 @@ async function loadHeader() {
     }
 }
 
-function initializeHeader() {
-    document.getElementById('loginButton').addEventListener('click', async () => {
-        loadForm()
-    });
+async function loadMoodboardContainer() {
+    try {
+        const response = await fetch('/view/moodboardContainerTemplate.html');
+        const text = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(text, 'text/html');
+        const template = doc.querySelector('#moodboardContainerTemplate').content;
+        document.body.appendChild(document.importNode(template, true));
+    } catch (error) {
+        console.error('Failed to load moodboard container template:', error);
+    }
 }
 
-async function loadMoodboards() {
+async function loadMoodboardTemplate() {
     try {
         const response = await fetch('/view/moodboardTemplate.html');
         const text = await response.text();
         const parser = new DOMParser();
         const doc = parser.parseFromString(text, 'text/html');
-        const template = doc.querySelector('#moodboardTemplate').content;
-        document.body.appendChild(document.importNode(template, true));
-        initializeMoodboards()
+        return doc.querySelector('template');
     } catch (error) {
         console.error('Failed to load moodboard template:', error);
+        return null;
     }
-}
-
-function initializeMoodboards() {
-    const moodboards = document.querySelectorAll('.moodboard-item');
-
-    function allowDrop(ev) {
-        ev.preventDefault();
-        ev.target.closest('.moodboard-item').classList.add('over');
-    }
-
-    function handleDragLeaveOrDrop(ev) {
-        ev.target.closest('.moodboard-item').classList.remove('over');
-    }
-
-    function drag(ev) {
-        if (ev.target.tagName === 'IMG') {
-            ev.dataTransfer.setData("text/plain", ev.target.src);
-        }
-    }
-
-    function drop(ev) {
-        ev.preventDefault();
-        ev.target.closest('.moodboard-item').classList.remove('over');
-        const moodboardItem = ev.target.closest('.moodboard-item');
-
-        if (ev.dataTransfer.files && ev.dataTransfer.files.length > 0) {
-            const file = ev.dataTransfer.files[0];
-            if (file.type.startsWith('image/')) {
-                displayImage(file, moodboardItem);
-            }
-        } else {
-            const url = ev.dataTransfer.getData("text");
-            if (url) {
-                displayImage(url, moodboardItem);
-            }
-        }
-    }
-
-    function displayImage(src, container) {
-        container.style.backgroundColor = 'transparent';
-        container.innerHTML = '';
-
-        const newImage = new Image();
-        if (typeof src === 'string') {
-            newImage.src = src;
-        } else if (src instanceof File) {
-            newImage.src = window.URL.createObjectURL(src);
-        }
-        newImage.style.maxWidth = '100%';
-        newImage.style.maxHeight = '100%';
-        container.innerHTML = '';
-        container.appendChild(newImage);
-    }
-
-    function handleClick(ev) {
-        const moodboardItem = ev.target.closest('.moodboard-item');
-        if (!moodboardItem) return;
-
-        const fileInput = document.createElement('input');
-        fileInput.type = 'file';
-        fileInput.accept = 'image/*';
-        fileInput.onchange = e => {
-            const file = e.target.files[0];
-            if (file && file.type.startsWith('image/')) {
-                displayImage(file, moodboardItem);
-            }
-        };
-        fileInput.click();
-    }
-
-    moodboards.forEach(item => {
-        item.addEventListener('dragover', allowDrop);
-        item.addEventListener('dragleave', handleDragLeaveOrDrop);
-        item.addEventListener('drop', drop);
-        item.addEventListener('click', handleClick);
-    });
 }
 
 async function loadFooter() {
@@ -124,14 +59,62 @@ async function loadFooter() {
     }
 }
 
+async function displayMoodboards() {
+    try {
+        const { status, data } = await loadMoodboards(apiUrl);
+        const templateElement = await loadMoodboardTemplate()
+        if (!templateElement) {
+            throw new Error('Moodboard template could not be loaded');
+        }
+        const templateContent = templateElement.content;
+
+        if (status === "OK" && data.length) {
+            const container = document.querySelector('#moodboardContainer');
+            container.innerHTML = '';
+
+            data.forEach(moodboard => {
+                const moodboardClone = document.importNode(templateContent, true);
+                const moodboardElement = moodboardClone.querySelector('.moodboard')
+
+                moodboardElement.innerHTML = '';
+
+                moodboard.images.forEach(image => {
+                    const item = document.createElement('div');
+                    item.className = 'moodboard-item';
+                    item.style.backgroundImage = `url(${image.url})`;
+                    item.title = image.title;
+                    moodboardElement.appendChild(item);
+                });
+                container.appendChild(moodboardClone);
+            });
+        }
+    } catch (error) {
+        console.error('Failed to load moodboards:', error);
+    }
+}
+
 async function loadHome() {
     try {
-        await loadHeader()
-        await loadMoodboards()
-        loadFooter()
+        document.body.innerHTML = '';
+        await loadHeader();
+        await loadMoodboardContainer();
+        await displayMoodboards();
+        loadFooter();
     } catch (error) {
         console.error('Failed to load home view templates', error);
     }
+}
+
+function initializeHeader() {
+    document.getElementById('homeButton').addEventListener('click', async () => {
+        loadHome()
+    });
+    document.getElementById('loginButton').addEventListener('click', async () => {
+        loadForm()
+    });
+    document.getElementById('createButton').addEventListener('click', async () => {
+        loadMoodboardView()
+    });
 }
 
 loadHome()
