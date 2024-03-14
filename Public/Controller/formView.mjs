@@ -4,7 +4,7 @@ const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:8080
 
 export async function loadForm() {
     try {
-        const response = await fetch('/view/formTemplate.html');
+        const response = await fetch('/View/formTemplate.html');
         const text = await response.text();
         const parser = new DOMParser();
         const doc = parser.parseFromString(text, 'text/html');

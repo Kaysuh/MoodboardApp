@@ -4,7 +4,7 @@ const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:8080
 
 async function loadNameField() {
     try {
-        const response = await fetch('/view/nameFieldTemplate.html');
+        const response = await fetch('/View/nameFieldTemplate.html');
         const text = await response.text();
         const parser = new DOMParser();
         const doc = parser.parseFromString(text, 'text/html');
@@ -19,7 +19,7 @@ async function loadNameField() {
 
 export async function loadMoodboardView() {
     try {
-        const response = await fetch('/view/moodboardCreationTemplate.html');
+        const response = await fetch('/View/moodboardCreationTemplate.html');
         const text = await response.text();
         const parser = new DOMParser();
         const doc = parser.parseFromString(text, 'text/html');

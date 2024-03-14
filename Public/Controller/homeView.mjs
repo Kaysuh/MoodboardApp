@@ -6,7 +6,7 @@ const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:8080
 
 async function loadHeader() {
     try {
-        const response = await fetch('/view/headerTemplate.html');
+        const response = await fetch('/View/headerTemplate.html');
         const text = await response.text();
         const parser = new DOMParser();
         const doc = parser.parseFromString(text, 'text/html');
@@ -21,7 +21,7 @@ async function loadHeader() {
 
 async function loadMoodboardContainer() {
     try {
-        const response = await fetch('/view/moodboardContainerTemplate.html');
+        const response = await fetch('/View/moodboardContainerTemplate.html');
         const text = await response.text();
         const parser = new DOMParser();
         const doc = parser.parseFromString(text, 'text/html');
@@ -34,7 +34,7 @@ async function loadMoodboardContainer() {
 
 async function loadMoodboardTemplate() {
     try {
-        const response = await fetch('/view/moodboardTemplate.html');
+        const response = await fetch('/View/moodboardTemplate.html');
         const text = await response.text();
         const parser = new DOMParser();
         const doc = parser.parseFromString(text, 'text/html');
@@ -47,7 +47,7 @@ async function loadMoodboardTemplate() {
 
 async function loadFooter() {
     try {
-        const response = await fetch('/view/footerTemplate.html');
+        const response = await fetch('/View/footerTemplate.html');
         const text = await response.text();
         const parser = new DOMParser();
         const doc = parser.parseFromString(text, 'text/html');
