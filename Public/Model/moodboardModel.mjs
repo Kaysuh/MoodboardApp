@@ -25,6 +25,8 @@ export async function saveMoodboard(apiUrl, moodboardData) {
         });
         const data = await response.json();
         console.log(data);
+        alert('Your moodboard has been successfully created!');
+        window.location.reload()
     } catch (error) {
         console.error('Failed to save moodboard:', error);
     }

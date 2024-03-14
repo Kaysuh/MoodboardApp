@@ -21,21 +21,25 @@ function initializeForm() {
     const authForm = document.getElementById('authForm');
     const email = document.getElementById('email');
     const password = document.getElementById('password');
-    const name = document.getElementById('name');
     const userAuthForm = document.getElementById("userAuthForm");
 
     document.getElementById('continueButton').addEventListener('click', async () => {
         if (authForm.classList.contains('login-form')) {
-            const response = await userLogin(email, password, apiUrl);
+            const response = await userLogin(email.value, password.value, apiUrl);
             if (response.ok) {
                 userAuthForm.style.display = "none";
-                // Further actions upon successful login
+                const data = await response.json();
+                sessionStorage.setItem('userToken', data.data.token);
+                console.log(data)
+                window.location.reload()
             } else {
                 loginErrorAnim();
             }
         } else {
-            const response = await userRegistration(name, email, password, apiUrl);
+            const name = document.getElementById('name');
+            const response = await userRegistration(email.value, password.value, name.value, apiUrl);
             if (response.ok) {
+                userAuthForm.style.display = "none";
                 toggleForm();
             }
             // Else, handle registration errors

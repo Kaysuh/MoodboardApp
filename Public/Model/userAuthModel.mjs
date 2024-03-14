@@ -1,7 +1,7 @@
 export async function userLogin(email, password, apiUrl) {
     const loginData = {
-        email: email.value,
-        password: password.value
+        email: email,
+        password: password
     };
 
     try {
@@ -25,17 +25,16 @@ export async function userRegistration(name, email, password, apiUrl) {
         email: email,
         password: password
     };
-
-    const fetchOptions = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userData)
-    };
-
+    console.log(name.value, password.value)
     try {
-        const response = await fetch(`${apiUrl}/user/register`, fetchOptions);
+        const response = await fetch(`${apiUrl}/user/register`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData),
+        });
+
         return response;
     } catch (error) {
         throw error;

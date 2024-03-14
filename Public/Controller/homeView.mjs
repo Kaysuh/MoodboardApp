@@ -107,14 +107,25 @@ async function loadHome() {
 
 function initializeHeader() {
     document.getElementById('homeButton').addEventListener('click', async () => {
-        loadHome()
-    });
-    document.getElementById('loginButton').addEventListener('click', async () => {
-        loadForm()
+        loadHome();
     });
     document.getElementById('createButton').addEventListener('click', async () => {
-        loadMoodboardView()
+        loadMoodboardView();
     });
+
+    const token = sessionStorage.getItem('userToken');
+    const loginButton = document.getElementById('loginButton');
+    if (token) {
+        loginButton.textContent = "Sign Out";
+        loginButton.addEventListener('click', async () => {
+            sessionStorage.removeItem('userToken');
+            loadHome();
+        });
+    } else {
+        loginButton.addEventListener('click', async () => {
+            loadForm();
+        });
+    }
 }
 
 loadHome()

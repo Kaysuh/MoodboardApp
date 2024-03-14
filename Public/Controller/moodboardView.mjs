@@ -2,6 +2,21 @@ import { saveMoodboard } from '../Model/moodboardModel.mjs';
 
 const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:8080' : 'https://moodboardapp.onrender.com';
 
+async function loadNameField() {
+    try {
+        const response = await fetch('/view/nameFieldTemplate.html');
+        const text = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(text, 'text/html');
+        const template = doc.querySelector('#nameFieldTemplate').content;
+        const container = document.querySelector('#moodboardContainer');
+
+        container.appendChild(document.importNode(template, true));
+    } catch (error) {
+        console.error('Failed to load name field template:', error);
+    }
+}
+
 export async function loadMoodboardView() {
     try {
         const response = await fetch('/view/moodboardCreationTemplate.html');
@@ -15,6 +30,7 @@ export async function loadMoodboardView() {
         const importedNode = document.importNode(template, true);
         container.appendChild(importedNode);
 
+        loadNameField()
         initializeCreationArea(container);
         initializeSaveButton()
     } catch (error) {
@@ -33,12 +49,17 @@ function initializeSaveButton() {
     const saveButton = document.getElementById('saveMoodboardButton');
     if (saveButton) {
         saveButton.addEventListener('click', async () => {
-            const moodboardName = 'YourMoodboardName';
+            const moodboardNameInput = document.getElementById('moodboardNameInput');
+            const moodboardName = moodboardNameInput.value;
+            if (!moodboardName) {
+                alert('Please enter a name for your moodboard.');
+                return;
+            }
+
             const images = Array.from(document.querySelectorAll('.moodboard-creation-area img')).map(img => ({
-                url: img.src,
-                title: 'Image Title',
-                description: 'Image Description'
+                url: img.src
             }));
+
             const moodboardData = { name: moodboardName, images };
             await saveMoodboard(apiUrl, moodboardData);
         });
@@ -96,7 +117,7 @@ function displayImage(file, container) {
         const numImages = container.children.length;
         const gridSideLength = Math.ceil(Math.sqrt(numImages + 1));
         container.style.gridTemplateColumns = `repeat(${gridSideLength}, 1fr)`;
-        img.classList.add('moodboard-item');
+        img.classList.add('moodboard-item-creation');
         container.appendChild(img);
         if (container.children.length === 1) {
             container.classList.add('not-empty');
