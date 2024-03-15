@@ -19,11 +19,12 @@ export async function userLogin(email, password, apiUrl) {
     }
 }
 
-export async function userRegistration(email, password, userName, apiUrl) {
+export async function userRegistration(email, password, userName, profilePicture, apiUrl) {
     const userData = {
         email: email,
         password: password,
-        userName: userName
+        userName: userName,
+        profilePicture: profilePicture
     };
     
     try {

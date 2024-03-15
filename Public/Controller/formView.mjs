@@ -30,25 +30,41 @@ function initializeForm() {
                 userAuthForm.style.display = "none";
                 const data = await response.json();
                 sessionStorage.setItem('userToken', data.data.token);
-                console.log(data)
-                window.location.reload()
+                sessionStorage.setItem('userProfilePicture', data.data.userResponse.profilePicture)
+                window.location.reload();
             } else {
                 loginErrorAnim();
             }
         } else {
             const userName = document.getElementById('userName');
-            const response = await userRegistration(email.value, password.value, userName.value, apiUrl);
-            if (response.ok) {
-                userAuthForm.style.display = "none";
-                window.location.reload()
-                toggleForm();
+            const profilePicture = document.getElementById('profilePicture');
+            if (profilePicture.files.length > 0) {
+                const file = profilePicture.files[0];
+                if (file.size > 1048576) {
+                    alert('Error: Image size exceeds 1MB limit.');
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onloadend = async () => {
+                    const profilePic = reader.result;
+                    const response = await userRegistration(email.value, password.value, userName.value, profilePic, apiUrl);
+                    if (response.ok) {
+                        userAuthForm.style.display = "none";
+                        window.location.reload();
+                        toggleForm();
+                    } else {
+                        alert('Registration failed. Please try again.');
+                    }
+                };
+                reader.readAsDataURL(file);
             }
-            // Else, handle registration errors
         }
     });
 
     document.getElementById('toggleButton').addEventListener('click', toggleForm);
 }
+
+
 
 function toggleForm() {
     const authForm = document.getElementById('authForm');
@@ -65,6 +81,14 @@ function toggleForm() {
         nameInput.id = "userName"
         nameInput.placeholder = 'Username';
         authForm.appendChild(nameInput);
+
+        const imageInput = document.createElement('input');
+        imageInput.type = 'file';
+        imageInput.id = "profilePicture";
+        imageInput.accept = 'image/*';
+        imageInput.placeholder = 'Upload profile picture';
+        authForm.appendChild(imageInput);
+
     } else {
         toggleButton.textContent = "Sign up instead?"
         formTitle.textContent = 'Sign in';

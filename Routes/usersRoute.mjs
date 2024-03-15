@@ -30,12 +30,13 @@ USER_API.get('/', async (req, res) => {
 
 
 USER_API.post('/register', async (req, res) => {
-    const { userName, email, password } = req.body;
+    const { userName, email, password, profilePicture } = req.body;
 
     if (userName != "" && email != "" && password != "") {
         let user = new User();
         user.userName = userName;
         user.email = email;
+        user.profilePicture = profilePicture
 
         user.pswHash = await bcrypt.hash(password, 10)
         let exists = false

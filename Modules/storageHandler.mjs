@@ -43,7 +43,8 @@ class DBManager {
                     const userResponse = {
                         id: user.id,
                         email: user.email,
-                        name: user.name
+                        username: user.username,
+                        profilePicture: user.profilePicture
                     };
 
                     return { userResponse, token };
@@ -132,7 +133,7 @@ class DBManager {
 
         try {
             await client.connect();
-            const output = await client.query('INSERT INTO "public"."Users"("email", "password", "username") VALUES($1::Text, $2::Text, $3::Text) RETURNING id;', [user.email, user.pswHash, user.userName,]);
+            const output = await client.query('INSERT INTO "public"."Users"("email", "password", "username", "profilePicture") VALUES($1::Text, $2::Text, $3::Text, $4::Text) RETURNING id;', [user.email, user.pswHash, user.userName, user.profilePicture]);
 
             if (output.rows.length == 1) {
                 user.id = output.rows[0].id;

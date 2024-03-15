@@ -121,6 +121,13 @@ function initializeHeader() {
     const loginButton = document.getElementById('loginButton');
 
     if (token) {
+        const userProfilePicture = sessionStorage.getItem('userProfilePicture')
+        if (userProfilePicture && userProfilePicture !== 'null' && userProfilePicture.trim() !== '') {
+            profilePic.src = userProfilePicture;
+        } else {
+            profilePic.src = 'https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg';
+        }
+
         profileMenuItem.style.display = 'block';
         loginButton.style.display = 'none';
 
