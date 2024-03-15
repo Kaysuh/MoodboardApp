@@ -44,7 +44,7 @@ class DBManager {
                         id: user.id,
                         email: user.email,
                         username: user.username,
-                        profilePicture: user.profilePicture
+                        profilepicture: user.profilePicture
                     };
                     return { userResponse, token };
                 }
