@@ -69,35 +69,48 @@ function initializeForm() {
 function toggleForm() {
     const authForm = document.getElementById('authForm');
     const formTitle = document.getElementById('formTitle');
-    const toggleButton = document.getElementById('toggleButton')
+    const toggleButton = document.getElementById('toggleButton');
     authForm.classList.toggle('login-form');
     authForm.classList.toggle('signup-form');
 
     if (authForm.classList.contains('signup-form')) {
         formTitle.textContent = 'Sign up';
-        const nameInput = document.createElement('input');
-        toggleButton.textContent = "Sign in instead?"
-        nameInput.type = 'text';
-        nameInput.id = "userName"
-        nameInput.placeholder = 'Username';
-        authForm.appendChild(nameInput);
 
+        const nameContainer = document.createElement('div');
+        nameContainer.className = 'input-container';
+        const nameInput = document.createElement('input');
+        nameInput.type = 'text';
+        nameInput.id = "userName";
+        nameInput.placeholder = 'Username';
+        nameContainer.appendChild(nameInput);
+        authForm.appendChild(nameContainer);
+
+        const imageContainer = document.createElement('div');
+        imageContainer.className = 'input-container';
         const imageInput = document.createElement('input');
         imageInput.type = 'file';
         imageInput.id = "profilePicture";
         imageInput.accept = 'image/*';
         imageInput.placeholder = 'Upload profile picture';
-        authForm.appendChild(imageInput);
+        imageContainer.appendChild(imageInput);
+        authForm.appendChild(imageContainer);
 
+        toggleButton.textContent = "Sign in instead?";
     } else {
-        toggleButton.textContent = "Sign up instead?"
+        toggleButton.textContent = "Sign up instead?";
         formTitle.textContent = 'Sign in';
-        const nameInput = document.querySelector('#authForm input[userName="userName"]');
-        if (nameInput) {
-            authForm.removeChild(nameInput);
+
+        const nameInput = document.querySelector('#authForm .input-container #userName');
+        const imageInput = document.querySelector('#authForm .input-container #profilePicture');
+        if (nameInput && nameInput.parentNode) {
+            nameInput.parentNode.remove();
+        }
+        if (imageInput && imageInput.parentNode) {
+            imageInput.parentNode.remove();
         }
     }
 }
+
 
 function loginErrorAnim() {
     const email = document.getElementById('email');

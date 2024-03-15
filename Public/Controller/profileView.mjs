@@ -31,6 +31,7 @@ export async function loadProfileView() {
                 try {
                     const response = await deleteMoodboard(apiUrl, token, moodboard.id);
                     if (response.ok) {
+                        alert("Your moodboard has been deleted!")
                         location.reload();
                     } else {
                         throw new Error('Failed to delete moodboard');
@@ -41,7 +42,6 @@ export async function loadProfileView() {
             });
 
             moodboardElement.appendChild(deleteButton);
-
             container.appendChild(moodboardClone);
         });
     } catch (error) {

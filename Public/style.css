@@ -89,6 +89,10 @@ footer {
   background-color: #303030;
 }
 
+.delete-button {
+  background-color: #7c0000;
+}
+
 h1,
 h2,
 h3,

@@ -8,7 +8,7 @@ export async function loadMoodboards(apiUrl, token) {
             headers['Authorization'] = `Bearer ${token}`;
             apiUrl += '/moodboard/user';
         } else {
-            apiUrl += '/moodboard'; // If no token, append only '/moodboard'
+            apiUrl += '/moodboard';
         }
         const response = await fetch(`${apiUrl}`, {
             method: 'GET',
