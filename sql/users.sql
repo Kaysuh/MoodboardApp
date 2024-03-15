@@ -3,7 +3,7 @@ CREATE TABLE "Users" (
     email text,
     username text,
     password text,
-    profilepicture text
+    profilePicture text
 );
 
 ALTER TABLE "public"."Users" ADD CONSTRAINT email_unique UNIQUE ("email");
