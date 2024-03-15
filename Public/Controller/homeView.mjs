@@ -122,7 +122,7 @@ function initializeHeader() {
 
     if (token) {
         const userProfilePicture = sessionStorage.getItem('userProfilePicture')
-        if (userProfilePicture && userProfilePicture !== 'null' && userProfilePicture.trim() !== '') {
+        if (userProfilePicture && userProfilePicture !== 'null' && userProfilePicture.trim() !== '' && userProfilePicture !=="undefined") {
             profilePic.src = userProfilePicture;
         } else {
             profilePic.src = 'https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg';

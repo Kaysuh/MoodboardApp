@@ -32,7 +32,7 @@ function initializeForm() {
                 sessionStorage.setItem('userToken', data.data.token);
                 sessionStorage.setItem('userProfilePicture', data.data.userResponse.profilePicture)
                 console.log(data)
-                window.location.reload();
+                // window.location.reload();
             } else {
                 loginErrorAnim();
             }
