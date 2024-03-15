@@ -32,7 +32,7 @@ class DBManager {
 
         try {
             await client.connect();
-            const result = await client.query('Select * from "public"."Users" where email = $1;', [email]);
+            const result = await client.query('SELECT * FROM "public"."Users" WHERE email = $1;', [email]);
             if (result.rows.length > 0) {
                 const user = result.rows[0];
                 const isMatch = await bcrypt.compare(password, user.password);
@@ -63,7 +63,7 @@ class DBManager {
 
         try {
             await client.connect();
-            const result = await client.query('Select * from "public"."Users";');
+            const result = await client.query('SELECT * FROM "public"."Users";');
             return result.rows;
         } catch (error) {
             console.error(error);
@@ -78,7 +78,7 @@ class DBManager {
 
         try {
             await client.connect();
-            const output = await client.query('Select * from "public"."Users" where id = $1;', [user.id]);
+            const output = await client.query('SELECT * FROM "public"."Users" WHERE id = $1;', [user.id]);
 
             if (output.rows.length > 0) {
                 return output.rows[0];
@@ -99,7 +99,7 @@ class DBManager {
 
         try {
             await client.connect();
-            const output = await client.query('Update "public"."Users" set "name" = $1, "email" = $2, "password" = $3 where id = $4;', [user.name, user.email, user.pswHash, user.id]);
+            const output = await client.query('UPDATE "public"."Users" set "name" = $1, "email" = $2, "password" = $3 WHERE id = $4;', [user.name, user.email, user.pswHash, user.id]);
 
             return { rowCount: output.rowCount };
         } catch (error) {
@@ -115,7 +115,7 @@ class DBManager {
 
         try {
             await client.connect();
-            const output = await client.query('Delete from "public"."Users"  where id = $1;', [user.id]);
+            const output = await client.query('Delete FROM "public"."Users"  WHERE id = $1;', [user.id]);
 
             return { rowCount: output.rowCount };
         } catch (error) {
@@ -132,7 +132,7 @@ class DBManager {
 
         try {
             await client.connect();
-            const output = await client.query('INSERT INTO "public"."Users"("name", "email", "password") VALUES($1::Text, $2::Text, $3::Text) RETURNING id;', [user.name, user.email, user.pswHash]);
+            const output = await client.query('INSERT INTO "public"."Users"("email", "password", "username") VALUES($1::Text, $2::Text, $3::Text) RETURNING id;', [user.email, user.pswHash, user.userName,]);
 
             if (output.rows.length == 1) {
                 user.id = output.rows[0].id;
@@ -153,7 +153,7 @@ class DBManager {
 
         try {
             await client.connect();
-            const output = await client.query('INSERT INTO "public"."Moodboards"("name", "images") VALUES($1::text, $2::json) RETURNING id;', [moodboard.name, JSON.stringify(moodboard.images)]);
+            const output = await client.query('INSERT INTO "public"."Moodboards"("name", "images", "user_id") VALUES($1::text, $2::json, $3::integer) RETURNING id;', [moodboard.name, JSON.stringify(moodboard.images), moodboard.userId]);
 
             if (output.rows.length > 0) {
                 return moodboard;
@@ -173,7 +173,7 @@ class DBManager {
 
         try {
             await client.connect();
-            const output = await client.query('Select * from "public"."Moodboards";');
+            const output = await client.query('SELECT * FROM "public"."Moodboards";');
             return output.rows;
         } catch (error) {
             console.error(error);
@@ -183,12 +183,28 @@ class DBManager {
         }
     }
 
+    async getAllUserMoodboards(userId) {
+        const client = new pg.Client(this.#credentials);
+
+        try {
+            await client.connect();
+            const output = await client.query('SELECT * FROM "public"."Moodboards" WHERE user_id = $1;', [userId]);
+            console.log(userId)
+            return output.rows;
+        } catch (error) {
+            console.error('Error fetching user:', error);
+            throw error;
+        } finally {
+            await client.end();
+        }
+    }
+
     async deleteMoodboard(moodboard) {
         const client = new pg.Client(this.#credentials);
 
         try {
             await client.connect();
-            const output = await client.query('Delete from "public"."Moodboards"  where id = $1;', [moodboard.id]);
+            const output = await client.query('Delete from "public"."Moodboards"  WHERE id = $1;', [moodboard.id]);
 
             return { rowCount: output.rowCount };
         } catch (error) {
@@ -204,7 +220,7 @@ class DBManager {
 
         try {
             await client.connect();
-            const output = await client.query('Update "public"."Moodboards" set "name" = $1, "images" = $2 where id = $3;', [moodboard.name, JSON.stringify(moodboard.images), moodboard.id]);
+            const output = await client.query('UPDATE "public"."Moodboards" set "name" = $1, "images" = $2 WHERE id = $3;', [moodboard.name, JSON.stringify(moodboard.images), moodboard.id]);
             return { rowCount: output.rowCount };
         } catch (error) {
             console.error('Error updating moodboard:', error);
@@ -213,7 +229,6 @@ class DBManager {
             client.end();
         }
     }
-
 
 }
 

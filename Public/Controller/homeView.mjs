@@ -1,6 +1,7 @@
 import { loadForm } from "./formView.mjs";
 import { loadMoodboards } from "../Model/moodboardModel.mjs";
 import { loadMoodboardView } from "./moodboardView.mjs";
+import { loadProfileView } from "./profileView.mjs";
 
 const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:8080' : 'https://moodboardapp.onrender.com';
 
@@ -114,18 +115,37 @@ function initializeHeader() {
     });
 
     const token = sessionStorage.getItem('userToken');
+    const profilePic = document.getElementById('profilePic');
+    const profileMenu = document.getElementById('profileMenu');
+    const profileMenuItem = document.querySelector('.profile-menu');
     const loginButton = document.getElementById('loginButton');
+
     if (token) {
-        loginButton.textContent = "Sign Out";
-        loginButton.addEventListener('click', async () => {
+        profileMenuItem.style.display = 'block';
+        loginButton.style.display = 'none';
+
+        profilePic.addEventListener('click', () => {
+            profileMenu.style.display = profileMenu.style.display === 'block' ? 'none' : 'block';
+        });
+
+        document.getElementById('viewProfileButton').addEventListener('click', () => {
+            profileMenu.style.display = 'none';
+            loadProfileView()
+        });
+
+        document.getElementById('signOutButton').addEventListener('click', async () => {
             sessionStorage.removeItem('userToken');
             loadHome();
         });
     } else {
+        profileMenuItem.style.display = 'none';
+        loginButton.style.display = 'block';
+
         loginButton.addEventListener('click', async () => {
             loadForm();
         });
     }
 }
 
-loadHome()
+loadHome();
+

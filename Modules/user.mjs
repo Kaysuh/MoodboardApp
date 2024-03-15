@@ -5,7 +5,8 @@ class User {
   constructor() {
     this.email;
     this.pswHash;
-    this.name;
+    this.userName;
+    this.profilePicture
     this.id;
   }
 

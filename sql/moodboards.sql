@@ -5,3 +5,9 @@ CREATE TABLE "Moodboards" (
     user_id INTEGER,
     FOREIGN KEY (user_id) REFERENCES "Users"(id)
 );
+
+ALTER TABLE "Moodboards"
+ADD CONSTRAINT fk_user_id
+FOREIGN KEY (user_id)
+REFERENCES "Users"(id)
+ON DELETE SET NULL;

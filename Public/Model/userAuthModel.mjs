@@ -19,13 +19,13 @@ export async function userLogin(email, password, apiUrl) {
     }
 }
 
-export async function userRegistration(name, email, password, apiUrl) {
+export async function userRegistration(email, password, userName, apiUrl) {
     const userData = {
-        name: name,
         email: email,
-        password: password
+        password: password,
+        userName: userName
     };
-    console.log(name.value, password.value)
+    
     try {
         const response = await fetch(`${apiUrl}/user/register`, {
             method: 'POST',

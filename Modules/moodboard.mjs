@@ -27,6 +27,11 @@ class Moodboard {
         return moodboards;
     }
 
+    async getUserMoodboards(userId) {
+        const moodboards = await DBManager.getAllUserMoodboards(userId)
+        return moodboards;
+    }
+
     async delete() {
         try {
             const deletionResult = await DBManager.deleteMoodboard(this);

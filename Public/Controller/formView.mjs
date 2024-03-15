@@ -36,10 +36,11 @@ function initializeForm() {
                 loginErrorAnim();
             }
         } else {
-            const name = document.getElementById('name');
-            const response = await userRegistration(email.value, password.value, name.value, apiUrl);
+            const userName = document.getElementById('userName');
+            const response = await userRegistration(email.value, password.value, userName.value, apiUrl);
             if (response.ok) {
                 userAuthForm.style.display = "none";
+                window.location.reload()
                 toggleForm();
             }
             // Else, handle registration errors
@@ -61,14 +62,13 @@ function toggleForm() {
         const nameInput = document.createElement('input');
         toggleButton.textContent = "Sign in instead?"
         nameInput.type = 'text';
-        nameInput.id = "name"
-        nameInput.placeholder = 'Name';
-        nameInput.name = 'name';
+        nameInput.id = "userName"
+        nameInput.placeholder = 'Username';
         authForm.appendChild(nameInput);
     } else {
         toggleButton.textContent = "Sign up instead?"
         formTitle.textContent = 'Sign in';
-        const nameInput = document.querySelector('#authForm input[name="name"]');
+        const nameInput = document.querySelector('#authForm input[userName="userName"]');
         if (nameInput) {
             authForm.removeChild(nameInput);
         }

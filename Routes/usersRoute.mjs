@@ -30,11 +30,11 @@ USER_API.get('/', async (req, res) => {
 
 
 USER_API.post('/register', async (req, res) => {
-    const { name, email, password } = req.body;
+    const { userName, email, password } = req.body;
 
-    if (name != "" && email != "" && password != "") {
+    if (userName != "" && email != "" && password != "") {
         let user = new User();
-        user.name = name;
+        user.userName = userName;
         user.email = email;
 
         user.pswHash = await bcrypt.hash(password, 10)
