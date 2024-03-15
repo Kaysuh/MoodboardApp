@@ -133,7 +133,7 @@ class DBManager {
 
         try {
             await client.connect();
-            const output = await client.query('INSERT INTO "public"."Users"("email", "password", "username", "profilePicture") VALUES($1::Text, $2::Text, $3::Text, $4::Text) RETURNING id;', [user.email, user.pswHash, user.userName, user.profilePicture]);
+            const output = await client.query('INSERT INTO "public"."Users"("email", "password", "username", "profilepicture") VALUES($1::Text, $2::Text, $3::Text, $4::Text) RETURNING id;', [user.email, user.pswHash, user.userName, user.profilePicture]);
 
             if (output.rows.length == 1) {
                 user.id = output.rows[0].id;
