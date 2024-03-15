@@ -46,7 +46,7 @@ class DBManager {
                         username: user.username,
                         profilePicture: user.profilePicture
                     };
-
+                    console.log(userResponse)
                     return { userResponse, token };
                 }
             }
