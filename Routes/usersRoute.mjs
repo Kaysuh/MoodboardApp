@@ -1,6 +1,7 @@
 import express, { json, response } from "express";
 import User from "../Modules/user.mjs";
 import bcrypt from 'bcrypt';
+import verifyTokenMiddleware from "../Modules/authorizationHandler.mjs"
 
 const USER_API = express.Router();
 USER_API.use(express.json());
@@ -9,7 +10,7 @@ USER_API.get('/:id', async (req, res) => {
     try {
         const user = new User();
         const userToGet = await user.getUser(req.params.id);
-        
+
         if (userToGet) {
             res.json(userToGet);
         } else {
@@ -22,10 +23,18 @@ USER_API.get('/:id', async (req, res) => {
 });
 
 
-USER_API.get('/', async (req, res) => {
-    const user = new User();
-    const users = await user.getUsers();
-    res.sendSuccess(users);
+USER_API.get('/', verifyTokenMiddleware, async (req, res) => {
+    try {
+        const user = new User();
+        let users = await user.getUsers();
+
+        users = users.filter(user => !user.isAdmin);
+
+        res.sendSuccess(users);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: 'Error fetching users' });
+    }
 });
 
 
@@ -67,7 +76,7 @@ USER_API.post('/login', async (req, res) => {
     }
 });
 
-USER_API.put('/:id', async (req, res) => {
+USER_API.put('/:id', verifyTokenMiddleware, async (req, res) => {
     const userIdToUpdate = parseInt(req.params.id, 10);
     const updatedUserData = req.body;
     const userToUpdate = new User();
@@ -88,9 +97,7 @@ USER_API.put('/:id', async (req, res) => {
     }
 });
 
-
-
-USER_API.delete('/:id', async (req, res) => {
+USER_API.delete('/:id', verifyTokenMiddleware, async (req, res) => {
     const userIdToDelete = parseInt(req.params.id, 10)
     const userToDelete = new User();
     userToDelete.id = userIdToDelete
@@ -104,6 +111,5 @@ USER_API.delete('/:id', async (req, res) => {
         res.sendError(new Error('An error occurred while deleting the user'), 500);
     }
 });
-
 
 export default USER_API

@@ -69,12 +69,10 @@ class SuperLogger {
     }
 
     #LogHTTPRequest(req, res, next) {
-        // TODO: Extract and format information important for your dev process. 
         let type = req.method;
         const path = req.originalUrl;
         const when = new Date().toLocaleTimeString();
 
-        // TODO: This is just one simple thing to create structure and order. Can you do more?
         type = colorize(type);
         this.#writeToLog([when, type, path].join(" "));
 
@@ -82,14 +80,9 @@ class SuperLogger {
     }
 
     #writeToLog(msg) {
-
         msg += "\n";
         console.log(msg);
-        ///TODO: The files should be based on current date.
-        // ex: 300124.log
-        // fs.appendFile("./log.txt", msg, { encoding: "utf8" }, (err) => { });
     }
 }
-
 
 export default SuperLogger

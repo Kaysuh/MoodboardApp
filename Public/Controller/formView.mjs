@@ -31,6 +31,7 @@ function initializeForm() {
                 const data = await response.json();
                 sessionStorage.setItem('userToken', data.data.token);
                 sessionStorage.setItem('userProfilePicture', data.data.userResponse.profilePicture)
+                sessionStorage.setItem('isAdmin', data.data.userResponse.isAdmin);
                 window.location.reload();
             } else {
                 loginErrorAnim();
@@ -63,8 +64,6 @@ function initializeForm() {
 
     document.getElementById('toggleButton').addEventListener('click', toggleForm);
 }
-
-
 
 function toggleForm() {
     const authForm = document.getElementById('authForm');
@@ -110,7 +109,6 @@ function toggleForm() {
         }
     }
 }
-
 
 function loginErrorAnim() {
     const email = document.getElementById('email');

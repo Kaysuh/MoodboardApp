@@ -6,7 +6,8 @@ class User {
     this.email;
     this.pswHash;
     this.userName;
-    this.profilePicture
+    this.profilePicture;
+    this.isAdmin;
     this.id;
   }
 

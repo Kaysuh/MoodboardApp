@@ -41,7 +41,7 @@ MOODBOARD_API.get('/user', verifyTokenMiddleware, async (req, res) => {
     }
 });
 
-MOODBOARD_API.delete('/:id', async (req, res) => {
+MOODBOARD_API.delete('/:id', verifyTokenMiddleware, async (req, res) => {
     const moodboardIdToDelete = parseInt(req.params.id, 10)
     const moodboardToDelete = new Moodboard();
     moodboardToDelete.id = moodboardIdToDelete

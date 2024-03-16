@@ -49,7 +49,6 @@ export async function loadProfileView() {
     }
 }
 
-
 async function loadMoodboardTemplate() {
     try {
         const response = await fetch('/View/moodboardTemplate.html');

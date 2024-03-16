@@ -2,6 +2,7 @@ import { loadForm } from "./formView.mjs";
 import { loadMoodboards } from "../Model/moodboardModel.mjs";
 import { loadMoodboardView } from "./moodboardView.mjs";
 import { loadProfileView } from "./profileView.mjs";
+import { loadAdminView } from "./adminView.mjs";
 
 const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:8080' : 'https://moodboardapp.onrender.com';
 
@@ -115,14 +116,18 @@ function initializeHeader() {
     });
 
     const token = sessionStorage.getItem('userToken');
+    const isAdmin = sessionStorage.getItem('isAdmin') === 'true';
     const profilePic = document.getElementById('profilePic');
     const profileMenu = document.getElementById('profileMenu');
     const profileMenuItem = document.querySelector('.profile-menu');
     const loginButton = document.getElementById('loginButton');
+    const adminButton = document.getElementById('adminButton')
+
+    adminButton.style.display = 'none';
 
     if (token) {
         const userProfilePicture = sessionStorage.getItem('userProfilePicture')
-        if (userProfilePicture && userProfilePicture !== 'null' && userProfilePicture.trim() !== '' && userProfilePicture !=="undefined") {
+        if (userProfilePicture && userProfilePicture !== 'null' && userProfilePicture.trim() !== '' && userProfilePicture !== "undefined") {
             profilePic.src = userProfilePicture;
         } else {
             profilePic.src = 'https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg';
@@ -142,8 +147,15 @@ function initializeHeader() {
 
         document.getElementById('signOutButton').addEventListener('click', async () => {
             sessionStorage.removeItem('userToken');
+            sessionStorage.removeItem('userProfilePicture');
             loadHome();
         });
+        if (isAdmin) {
+            adminButton.style.display = 'block';
+            adminButton.addEventListener('click', () => {
+                loadAdminView()
+            });
+        }
     } else {
         profileMenuItem.style.display = 'none';
         loginButton.style.display = 'block';

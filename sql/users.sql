@@ -3,9 +3,9 @@ CREATE TABLE "Users" (
     email text,
     username text,
     password text,
-    profilePicture text
+    profilePicture text,
+    isAdmin boolean DEFAULT false
 );
-
 ALTER TABLE "public"."Users" ADD CONSTRAINT email_unique UNIQUE ("email");
 
 

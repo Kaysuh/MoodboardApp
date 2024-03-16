@@ -11,6 +11,10 @@ header {
   align-items: center;
 }
 
+li {
+  color: #d0d0d0;
+}
+
 footer {
   background-color: rgb(31, 31, 31);
   color: #ffffff;

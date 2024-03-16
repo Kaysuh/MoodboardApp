@@ -15,7 +15,6 @@ export async function loadMoodboards(apiUrl, token) {
             headers: headers
         });
         const data = await response.json();
-        console.log(data);
         return data;
     } catch (error) {
         console.error('Failed to load moodboards:', error);
