@@ -1,4 +1,3 @@
-// moodboard.mjs
 import DBManager from "./storageHandler.mjs";
 
 class Moodboard {

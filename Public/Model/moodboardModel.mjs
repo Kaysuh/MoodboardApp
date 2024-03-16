@@ -36,7 +36,6 @@ export async function saveMoodboard(apiUrl, moodboardData) {
 
         if (response.ok) {
             const data = await response.json();
-            console.log(data);
             alert('Your moodboard has been successfully created!');
             window.location.reload();
         } else if (response.status === 403) {
@@ -78,7 +77,6 @@ export async function searchMoodboards(apiUrl, searchQuery) {
             headers: headers
         });
         if (!response.ok) {
-            console.log(response)
             throw new Error(`Failed to search moodboards with status: ${response.status}`);
         }
         const data = await response.json();

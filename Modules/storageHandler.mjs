@@ -26,7 +26,6 @@ class DBManager {
 
     }
 
-    //USER
     async authenticateUser(email, password) {
         const client = new pg.Client(this.#credentials);
 
@@ -93,7 +92,6 @@ class DBManager {
         }
     }
 
-
     async updateUser(user) {
         const client = new pg.Client(this.#credentials);
 
@@ -143,7 +141,6 @@ class DBManager {
         return user;
     }
 
-    //MOODBOARD
     async createMoodboard(moodboard) {
         const client = new pg.Client(this.#credentials);
 

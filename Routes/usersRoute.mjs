@@ -6,7 +6,7 @@ import verifyTokenMiddleware from "../Modules/authorizationHandler.mjs"
 const USER_API = express.Router();
 USER_API.use(express.json());
 
-USER_API.get('/:id', async (req, res) => {
+USER_API.get('/:id', verifyTokenMiddleware, async (req, res) => {
     try {
         const user = new User();
         const userToGet = await user.getUser(req.params.id);
@@ -22,7 +22,6 @@ USER_API.get('/:id', async (req, res) => {
     }
 });
 
-
 USER_API.get('/', verifyTokenMiddleware, async (req, res) => {
     try {
         const user = new User();
@@ -36,7 +35,6 @@ USER_API.get('/', verifyTokenMiddleware, async (req, res) => {
         res.status(500).send({ message: 'Error fetching users' });
     }
 });
-
 
 USER_API.post('/register', async (req, res) => {
     const { userName, email, password, profilePicture } = req.body;
@@ -60,7 +58,6 @@ USER_API.post('/register', async (req, res) => {
         res.sendError(new Error('Missing name, email, or password'), 400);
     }
 });
-
 
 USER_API.post('/login', async (req, res) => {
     const { email, password } = req.body;
