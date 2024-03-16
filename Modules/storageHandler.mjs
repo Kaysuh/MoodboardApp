@@ -223,6 +223,21 @@ class DBManager {
             client.end();
         }
     }
+
+    async searchMoodboardsDb(searchTerm) {
+        const client = new pg.Client(this.#credentials);
+
+        try {
+            await client.connect();
+            const output = await client.query('SELECT * FROM "public"."Moodboards" WHERE name ILIKE $1;', [`%${searchTerm}%`]);
+            return output.rows;
+        } catch (error) {
+            console.error('Error searching moodboards:', error);
+            throw error;
+        } finally {
+            await client.end();
+        }
+    }
 }
 
 export default new DBManager(dbConnectionString);

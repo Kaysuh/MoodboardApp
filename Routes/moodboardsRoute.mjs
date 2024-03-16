@@ -77,5 +77,19 @@ MOODBOARD_API.put('/:id', verifyTokenMiddleware, async (req, res) => {
     }
 });
 
+MOODBOARD_API.get('/search', async (req, res) => {
+    try {
+        const { name } = req.query;
+        const moodboard = new Moodboard();
+        const searchResults = await moodboard.searchMoodboards(name);
+        if (Array.isArray(searchResults) && searchResults.length > 0) {
+            res.sendSuccess({ message: 'Moodboard found!', searchResults }, 200);
+        } else {
+            res.sendError(new Error('Moodboard not found'), 404);
+        }
+    } catch (error) {
+        res.sendError(new Error('Moodboard not found'), 404);
+    }
+});
 
 export default MOODBOARD_API;

@@ -25,7 +25,6 @@ export async function loadMoodboards(apiUrl, token) {
 export async function saveMoodboard(apiUrl, moodboardData) {
     try {
         const token = sessionStorage.getItem('userToken');
-        console.log(token)
         const response = await fetch(`${apiUrl}/moodboard`, {
             method: 'POST',
             headers: {
@@ -67,4 +66,27 @@ export async function deleteMoodboard(apiUrl, token, moodboardId) {
         throw error;
     }
 }
+
+export async function searchMoodboards(apiUrl, searchQuery) {
+    try {
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+        
+        const response = await fetch(`${apiUrl}/moodboard/search?name=${encodeURIComponent(searchQuery)}`, {
+            method: 'GET',
+            headers: headers
+        });
+        if (!response.ok) {
+            console.log(response)
+            throw new Error(`Failed to search moodboards with status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Failed to search moodboards:', error);
+        throw error;
+    }
+}
+
 

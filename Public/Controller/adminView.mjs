@@ -26,7 +26,6 @@ export async function loadAdminView() {
     userButton.addEventListener('click', async () => {
         try {
             const users = await fetchUsers(token, apiUrl);
-            console.log(users)
             const container = document.querySelector('#moodboardContainer');
             container.innerHTML = '';
 

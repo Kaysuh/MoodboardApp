@@ -41,6 +41,11 @@ class Moodboard {
             throw error;
         }
     }
+
+    async searchMoodboards(searchTerm) {
+        const moodboards = await DBManager.searchMoodboardsDb(searchTerm)
+        return moodboards;
+    }
 }
 
 export default Moodboard;
